@@ -6,7 +6,8 @@ require_relative 'review'
 BASE_URL = "https://www.dealerrater.com"
 BASE_DIR = "/dealer/McKaig-Chevrolet-Buick-A-Dealer-For-The-People-dealer-reviews-23685/page"
 LAST_PAGE_NUMBER = 5
-REVIEWS_TO_DISPLAY = 3
+REVIEWS_TO_DISPLAY = 5
+RATING_SIZE = 2
 reviewers = []
 reviews = []
 ratings = []
@@ -42,7 +43,7 @@ end
 
 #Create review objects for each review scraped.
 reviewers.zip(reviews,ratings).each do |reviewer, review, rating|
-	Review.new reviewer.gsub("- ",""), review, rating.to_s[rating.to_s.index(/\d\d/),2], review.length
+	Review.new reviewer.gsub("- ",""), review, rating.to_s[rating.to_s.index(/\d\d/),RATING_SIZE], review.length
 end
 #Clean up lists
 reviewers =nil, reviews = nil, ratings = nil
