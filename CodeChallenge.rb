@@ -2,6 +2,7 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 require_relative 'review'
+
 BASE_URL = "https://www.dealerrater.com"
 BASE_DIR = "/dealer/McKaig-Chevrolet-Buick-A-Dealer-For-The-People-dealer-reviews-23685/page"
 LAST_PAGE_NUMBER = 5
@@ -26,7 +27,7 @@ end
 
 
 #Scrape reviews from dealer rater for 1--N pages based off LAST_PAGE_NUMBER
-#Push reiewer, review and rating to lists to create Review Objects
+#Push reviewer, review and rating to lists to create Review Objects
 for page_number in 1.. LAST_PAGE_NUMBER do
 	page = Nokogiri::HTML(open("#{BASE_URL}#{BASE_DIR}#{page_number}",
 		"User-Agent" => " Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"))
@@ -43,6 +44,8 @@ end
 reviewers.zip(reviews,ratings).each do |reviewer, review, rating|
 	Review.new reviewer.gsub("- ",""), review, rating.to_s[rating.to_s.index(/\d\d/),2], review.length
 end
+#Clean up lists
+reviewers =nil, reviews = nil, ratings = nil
 
 #Sort Reviews by highest rating and then longest review
 sorted = Review.all_instances.sort_by{ |r| [r.rating, r.reviewLength]}.reverse
